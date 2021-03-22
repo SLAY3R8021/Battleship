@@ -1,6 +1,9 @@
+import sys
+
 class Grid:
-    def __init__(self, size):
+    def __init__(self, size, player):
         self.size = size
+        self.player = player
         self.ship = []
         self.shot = []
         self.count = 0
@@ -41,16 +44,9 @@ class Grid:
                 for t in range(self.size + 1):
                     val = temp[t]
                     string += val
-                print(string)while pmove_count <= ship_size:
-                            if prow[pcol] == "     /":
-                                continue
-                            else:
-                                return print("\nShips overlap. Please choose another spot or different direction.")
-                            ppot -= 1
-                            prow = self.ship[ppot]
-                            pmove_count += 1
+                print(string)
     
-    def create_ship(self, location, direction, ship_size, number):
+    def create_ship(self, location, direction, ship_size):
         alpha = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
         for j in range(1, len(alpha) + 1):
             if str(location[0]) == str(alpha[j - 1]):
@@ -74,76 +70,94 @@ class Grid:
                     if direction == "L":
                         while pmove_count <= ship_size:
                             if prow[pcol] == "     /":
-                                continue
+                                pass
                             else:
                                 return print("\nShips overlap. Please choose another spot or different direction.")
                             pcol -= 1
                             pmove_count += 1
-                        row[col] = "  {}  /".format(number)
+                        row[col] = "  S  /"
                         self.count += ship_size
                         while move_count < ship_size:
                             col -= 1
-                            row[col] = "  {}  /".format(number)
+                            row[col] = "  S  /"
                             move_count += 1
                         self.ship[pot] = row
                     elif direction == "R":
                         while pmove_count <= ship_size:
                             if prow[pcol] == "     /":
-                                continue
+                                pass
                             else:
                                 return print("\nShips overlap. Please choose another spot or different direction.")
                             pcol += 1
                             pmove_count += 1
-                        row[col] = "  {}  /".format(number)
+                        row[col] = "  S  /"
                         self.count += ship_size
                         while move_count < ship_size:
                             col += 1
-                            row[col] = "  {}  /".format(number)
+                            row[col] = "  S  /"
                             move_count += 1
                         self.ship[pot] = row
                     elif direction == "U":
                         while pmove_count <= ship_size:
                             if prow[pcol] == "     /":
-                                continue
+                                pass
                             else:
                                 return print("\nShips overlap. Please choose another spot or different direction.")
                             ppot -= 1
                             prow = self.ship[ppot]
                             pmove_count += 1
-                        row[col] = "  {}  /".format(number)
+                        row[col] = "  S  /"
                         self.count += ship_size
                         self.ship[pot] = row
                         while move_count < ship_size:
                             pot -= 1
                             row = self.ship[pot]
-                            row[col] = "  {}  /".format(number)
+                            row[col] = "  S  /"
                             self.ship[pot] = row
                             move_count += 1
                     elif direction == "D":
                         while pmove_count <= ship_size:
                             if prow[pcol] == "     /":
-                                continue
+                                pass
                             else:
                                 return print("\nShips overlap. Please choose another spot or different direction.")
                             ppot += 1
                             prow = self.ship[ppot]
                             pmove_count += 1
-                        row[col] = "  {}  /".format(number)
+                        row[col] = "  S  /"
                         self.count += ship_size
                         self.ship[pot] = row
                         while move_count < ship_size:
                             pot += 1
                             row = self.ship[pot]
-                            row[col] = "  {}  /".format(number)
+                            row[col] = "  S  /"
                             self.ship[pot] = row
                             move_count += 1
                     else:
                         return print("\nDirection or location is invalid. Please enter a new spot.")
 
+    def shoot(self, location):
+        alpha = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+        for j in range(1, len(alpha) + 1):
+            if str(location[0]) == str(alpha[j - 1]):
+                ship = self.ship[j]
+                shot = self.ship[j]
+                col = int(location[1])
+                if ship[col] == "  S  /":
+                    shot[col] = "  X  /"
+                    self.count -= 1
+                    print("\n---DIRECT HIT---")
+                else:
+                    shot[col] = "  O  /"
+                    print("\n---MISS---")
+                if self.count == 0:
+                    print("\n---{} WINS---".format(self.player))
+                    sys.exit()
 
-
-grid = Grid(10)
+grid = Grid(10, "PLAYER 1")
 grid.creating_grid()
 grid.print_grid("ship")
-grid.create_ship("A9", "R", 3, 1)
+grid.shoot("A4")
+grid.create_ship("A9", "L", 3, 1)
+grid.create_ship("A9", "D", 3, 1)
 grid.print_grid("ship")
